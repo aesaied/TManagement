@@ -1,3 +1,15 @@
 ﻿@{
-    Layout = "_Layout";
+
+    ViewBag.IsRTL = Thread.CurrentThread.CurrentUICulture.TextInfo.IsRightToLeft;
+
+    // if (ViewBag.IsRTL)
+    // {
+    //     Layout = "_ARLayout";
+    // }
+    // else
+    // {
+    //     Layout = "_Layout";
+
+    // }
+
 }

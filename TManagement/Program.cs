@@ -1,5 +1,10 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
+using System.Globalization;
+using TManagement.AppServices.Loockups;
 using TManagement.Entities;
 
 namespace TManagement
@@ -13,7 +18,11 @@ namespace TManagement
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews();
+            builder.Services.AddControllersWithViews().AddViewLocalization();
+
+            builder.Services.AddMemoryCache();
+            builder.Services.AddAutoMapper(typeof(MapperProfile));
+            builder.Services.AddScoped<ILoockupAppService, LoockupAppService>();
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
 
@@ -31,11 +40,43 @@ namespace TManagement
             options.UseSqlServer(connStr)
             );
 
-          //  builder.Services.AddDbContext<AppDbContext2>(options =>
-          //options.UseSqlServer(connStr2)
-          //);
+            //  builder.Services.AddDbContext<AppDbContext2>(options =>
+            //options.UseSqlServer(connStr2)
+            //);
+
+
+
+            //string.Format("Welecome {0}", "Alaa");
+
+            //  Register localization
+
+            builder.Services.Configure<MvcDataAnnotationsLocalizationOptions>(options =>
+            {
+                options.DataAnnotationLocalizerProvider = (type, factory) =>
+                  factory.Create(typeof(TManagementApp));
+            });
+          
+            builder.Services.AddLocalization(options => options.ResourcesPath = "Resources");
+            builder.Services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("en-US"),
+                    new CultureInfo("ar-JO")
+                 };
+                options.DefaultRequestCulture = new RequestCulture(culture: "ar-JO", uiCulture: "ar-JO");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+
+                //options.RequestCultureProviders.Clear();
+               // options.RequestCultureProviders.Insert(0, new CookieRequestCultureProvider());
+
+            });
 
             var app = builder.Build();
+
+
+
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
@@ -47,6 +88,8 @@ namespace TManagement
 
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            app.UseRequestLocalization(app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
             //load user info
             app.UseAuthentication();
             app.UseRouting();

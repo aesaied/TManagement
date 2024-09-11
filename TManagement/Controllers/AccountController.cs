@@ -1,15 +1,17 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TManagement.AppServices.Account;
+using TManagement.AppServices.Loockups;
 using TManagement.Entities;
 using TManagement.Services;
 
 namespace TManagement.Controllers
 {
-    public class AccountController : Controller
+    public class AccountController(ILoockupAppService _loockupsService) : Controller
     {
 
        
@@ -81,5 +83,42 @@ namespace TManagement.Controllers
             ModelState.AddModelError("", "Invalid username or password");
             return View(input);
         }
+
+
+        [HttpGet]
+        public async Task<IActionResult> Register()
+        {
+           await FillLoockups();
+
+            return View();
+        }
+
+        private async Task FillLoockups()
+        {
+            var  countries= await _loockupsService.GetLoockupList(LookupType.Country);
+            var cities = await _loockupsService.GetLoockupList(LookupType.City);
+            var eduLevel = await _loockupsService.GetLoockupList(LookupType.EducationLevel);
+
+            var  selCountry= new SelectList(countries, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
+
+            var  lst = selCountry.ToList();
+            lst.Insert(0, new SelectListItem("--select--", "-1",false));
+            ViewBag.Country = lst;
+            ViewBag.Cities = new SelectList(cities, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
+            ViewBag.EducucationLevels = new SelectList(eduLevel, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
+
+
+        }
+
+
+        public async Task<IActionResult> GetCities(Guid countryId)
+        {
+            var cities = await _loockupsService.GetLoockupList(LookupType.City);
+
+            return Json( cities.Where(s=>s.FatherLookupId == countryId).ToList());
+
+        }
+
+
     }
 }
