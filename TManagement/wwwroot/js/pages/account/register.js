@@ -6,6 +6,11 @@ $(function () {
     $.getJSON(`/api/loockups/getall/5`, function (data) {
         cities = data.result;
 
+
+        //  check  hdn field --> value
+        // fillcities 
+        //  set  selected city
+
        
     });
 

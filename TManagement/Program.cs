@@ -1,9 +1,11 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Globalization;
+using TManagement.AppServices.Account;
 using TManagement.AppServices.Loockups;
 using TManagement.Entities;
 
@@ -18,11 +20,17 @@ namespace TManagement
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            builder.Services.AddControllersWithViews().AddViewLocalization();
+            builder.Services.AddControllersWithViews(options => {
+            
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());   
+            }
+                
+                ).AddViewLocalization();
 
             builder.Services.AddMemoryCache();
             builder.Services.AddAutoMapper(typeof(MapperProfile));
             builder.Services.AddScoped<ILoockupAppService, LoockupAppService>();
+            builder.Services.AddScoped<IAccountAppService, AccountAppService>();    
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
 

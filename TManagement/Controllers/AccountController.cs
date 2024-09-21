@@ -11,7 +11,7 @@ using TManagement.Services;
 
 namespace TManagement.Controllers
 {
-    public class AccountController(ILoockupAppService _loockupsService) : Controller
+    public class AccountController(ILoockupAppService _loockupsService, IAccountAppService accountAppService) : Controller
     {
 
        
@@ -28,6 +28,7 @@ namespace TManagement.Controllers
         }
 
         [HttpPost]
+      
         public async Task<IActionResult> Login(LoginDto input,[FromServices] AppDbContext context )
         {
 
@@ -93,18 +94,54 @@ namespace TManagement.Controllers
             return View();
         }
 
-        private async Task FillLoockups()
+        [HttpPost]
+
+        public async Task<IActionResult> Register(RegisterDto registerDto)
+        {
+            if (ModelState.IsValid)
+            {
+                var result = await accountAppService.Register(registerDto);
+
+                if (result.Success)
+                {
+                    this.SetMessage("Your account is registered Successfully!!");
+                    return RedirectToAction(nameof(Login));
+                }
+
+                foreach (var error in result.Errors)
+                {
+
+                    ModelState.AddModelError("", error);
+                }
+            }
+
+           await FillLoockups(registerDto.CountryId);
+            return View(registerDto);
+
+            
+
+        }
+
+        private async Task FillLoockups(Guid? countryId=null)
         {
             var  countries= await _loockupsService.GetLoockupList(LookupType.Country);
-            var cities = await _loockupsService.GetLoockupList(LookupType.City);
+           
             var eduLevel = await _loockupsService.GetLoockupList(LookupType.EducationLevel);
 
             var  selCountry= new SelectList(countries, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
 
             var  lst = selCountry.ToList();
-            lst.Insert(0, new SelectListItem("--select--", "-1",false));
+            //lst.Insert(0, new SelectListItem("--select--", "-1",false));
             ViewBag.Country = lst;
-            ViewBag.Cities = new SelectList(cities, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
+            if (countryId.HasValue)
+            {
+                var cities = await _loockupsService.GetLoockupList(LookupType.City);
+                ViewBag.Cities = new SelectList(cities.FindAll(s => s.FatherLookupId == countryId), nameof(LoockupDto.Id), nameof(LoockupDto.Name));
+            }
+            else
+            {
+                ViewBag.Cities = new List<SelectListItem>();
+            }
             ViewBag.EducucationLevels = new SelectList(eduLevel, nameof(LoockupDto.Id), nameof(LoockupDto.Name));
 
 
@@ -116,6 +153,15 @@ namespace TManagement.Controllers
             var cities = await _loockupsService.GetLoockupList(LookupType.City);
 
             return Json( cities.Where(s=>s.FatherLookupId == countryId).ToList());
+
+        }
+
+
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction(nameof(Login));
 
         }
 

@@ -68,6 +68,8 @@
 
                             <form asp-action="Register">
 
+                                <div asp-validation-summary="ModelOnly" class="alert alert-danger"></div>
+
                                 <div class="mb-3">
                                     <label asp-for="FullName"  class="form-label"></label>
                                     <input class="form-control"  asp-for="FullName">
@@ -87,12 +89,18 @@
                                 </div>
                                 <div class="mb-3">
                                     <label asp-for="CityId" class="form-label"></label>
-                                    <select id="cmbCity" asp-items="ViewBag.Cities" class="form-control" asp-for="CityId"></select>
+                                    @*  *@
+                                    <select id="cmbCity" asp-items="ViewBag.Cities" class="form-control" asp-for="CityId">
+                                        <option value="">--select--</option>
+                                    </select>
                                     <span asp-validation-for="CityId" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">
                                     <label asp-for="EducationLevelId" class="form-label"></label>
-                                    <select asp-items="ViewBag.EducucationLevels" class="form-control" asp-for="EducationLevelId"></select>
+                                    <select asp-items="ViewBag.EducucationLevels" class="form-control" asp-for="EducationLevelId">
+                                        <option value="">--select--</option>
+
+                                    </select>
                                     <span asp-validation-for="EducationLevelId" class="text-danger"></span>
                                 </div>
                                 <div class="mb-3">

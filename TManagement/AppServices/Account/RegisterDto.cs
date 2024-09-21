@@ -19,12 +19,15 @@ namespace TManagement.AppServices.Account
 
         [Required]
         [StringLength(20)]
+        [DataType(DataType.Password)]
+
         public string? Password { get; set; }
 
         [Required(ErrorMessage = "ValRequired")]
         [StringLength(20)]
         [Compare(nameof(Password),ErrorMessage ="Confirm password doesn't match  password!")]
         [Display(Name = "ConfirmPassword")]
+        [DataType(DataType.Password)]
         public string? ConfirmPassword { get; set; }
 
 

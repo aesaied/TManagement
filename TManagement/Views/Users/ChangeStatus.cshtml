@@ -1,0 +1,73 @@
+﻿@using TManagement.AppServices.Account
+@using TManagement.Entities
+@model UserListItemDto
+@{
+    Layout = null;
+}
+
+<div id="user-changeStatus-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" style="display: none;">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Change status</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body p-4">
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="field-1" class="form-label">Name</label>
+                            <label type="text" class="form-control" id="field-1">@Model.FullName</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="mb-3">
+                            <label for="field-2" class="form-label">Email</label>
+                            <label type="text" class="form-control" id="field-2" >@Model.Email</label>
+                        </div>
+                    </div>
+                </div>
+               
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="field-4" class="form-label">City</label>
+                            <label type="text" class="form-control" id="field-4" >@Model.City</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="field-5" class="form-label">Country</label>
+                            <label type="text" class="form-control" id="field-5" >@Model.Country</label>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="mb-3">
+                            <label for="field-6" class="form-label">Eduction level</label>
+                            <label type="text" class="form-control" id="field-6" >@Model.EducationLevel</label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="">
+                            <label for="field-7" class="form-label">New status</label>
+                            @{
+                                var statusList = Html.GetEnumSelectList(typeof(UserStatus)); 
+                            }
+
+                            <input id="hdnId" type="hidden" asp-for="Id" />
+                            <select class="form-select" asp-items="statusList" id="cmbStatus" asp-for="CurrentStatus" >
+                                
+                            </select>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary waves-effect" data-bs-dismiss="modal">Close</button>
+                <button id="btnSave" type="button" class="btn btn-info waves-effect waves-light">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div><!-- /.modal -->
