@@ -5,7 +5,7 @@ using TManagement.AppServices.Account;
 
 namespace TManagement.Controllers
 {
-    public class UsersController(IAccountAppService accountAppService) : Controller
+    public class UsersController( IAccountAppService accountAppService) : Controller
     {
 
         public IActionResult Index()

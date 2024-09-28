@@ -1,17 +1,23 @@
 ﻿using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.SignalR;
+using Microsoft.DotNet.Scaffolding.Shared.Messaging;
 using Microsoft.EntityFrameworkCore;
 using System.Security.Claims;
 using TManagement.AppServices.Account;
 using TManagement.AppServices.Loockups;
 using TManagement.Entities;
+using TManagement.Hubs;
 using TManagement.Services;
 
 namespace TManagement.Controllers
 {
-    public class AccountController(ILoockupAppService _loockupsService, IAccountAppService accountAppService) : Controller
+
+    [AllowAnonymous]
+    public class AccountController(INotificationManager _notification, ILoockupAppService _loockupsService, IAccountAppService accountAppService) : Controller
     {
 
        
@@ -56,6 +62,7 @@ namespace TManagement.Controllers
                               new Claim(ClaimTypes.Name, user.Email!),
                               new Claim(ClaimTypes.Email, user.Email ?? "-"),
                             new Claim(ClaimTypes.GivenName,user.FullName??"-"),
+                            new Claim("UserId",user.Id.ToString())
                             };
 
                             foreach(var group  in user.Groups)
@@ -104,6 +111,9 @@ namespace TManagement.Controllers
 
                 if (result.Success)
                 {
+
+                    // send notification
+                    await _notification.NotifyWithoutDb(new NotificationInfo() { Type = NotificationType.Success, Message = $"New user registration with email {registerDto.Email}" });
                     this.SetMessage("Your account is registered Successfully!!");
                     return RedirectToAction(nameof(Login));
                 }

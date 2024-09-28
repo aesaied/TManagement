@@ -1,13 +1,18 @@
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using System.Globalization;
 using TManagement.AppServices.Account;
+using TManagement.AppServices.Attachments;
 using TManagement.AppServices.Loockups;
 using TManagement.Entities;
+using TManagement.Hubs;
+using TManagement.Services;
 
 namespace TManagement
 {
@@ -16,13 +21,19 @@ namespace TManagement
         public static void Main(string[] args)
         {
 
+
+            
            
             var builder = WebApplication.CreateBuilder(args);
 
+            
+            //Register  required services for signalR
+            builder.Services.AddSignalR();
             // Add services to the container.
             builder.Services.AddControllersWithViews(options => {
             
-                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());   
+                options.Filters.Add(new AutoValidateAntiforgeryTokenAttribute());
+                options.Filters.Add(new AuthorizeFilter());
             }
                 
                 ).AddViewLocalization();
@@ -31,6 +42,9 @@ namespace TManagement
             builder.Services.AddAutoMapper(typeof(MapperProfile));
             builder.Services.AddScoped<ILoockupAppService, LoockupAppService>();
             builder.Services.AddScoped<IAccountAppService, AccountAppService>();    
+            builder.Services.AddScoped<INotificationManager, NotificationManager>();
+            builder.Services.AddScoped<IAttachmentsAppService, AttachmentsAppService>();
+
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {
 
@@ -39,6 +53,13 @@ namespace TManagement
               
             
             });
+
+
+            //builder.Services.AddAuthorization(s => {
+            
+            //    s.
+            
+            //});
 
             string connStr = builder.Configuration.GetConnectionString("MyAppConnStr");
 
@@ -112,7 +133,8 @@ namespace TManagement
             //});
             ////
             app.UseAuthorization();
-
+            // map  hub to  url
+            app.MapHub<NotificationHub>("/notificationHub");
             app.MapControllerRoute(
                 name: "default",
                 pattern: "{controller=Home}/{action=Index}/{id?}");

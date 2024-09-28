@@ -6,9 +6,10 @@ using TManagement.Services;
 using System.Linq.Dynamic.Core;
 using AutoMapper.QueryableExtensions;
 using Microsoft.Data.SqlClient.DataClassification;
+using TManagement.Enums;
 namespace TManagement.AppServices.Account
 {
-    public class AccountAppService(AppDbContext dbContext, IMapper _mapper) : IAccountAppService
+    public class AccountAppService(AppDbContext dbContext, IMapper _mapper, INotificationManager notificationManager) : IAccountAppService
     {
 
         public async Task<AppResult> Register(RegisterDto input)
@@ -117,6 +118,8 @@ namespace TManagement.AppServices.Account
             {
                 user.CurrentStatus = input.Status;
                 await dbContext.SaveChangesAsync();
+
+               await notificationManager.Notify(SysGroups.Admins, new NotificationInfo() { Message = $"User {user.FullName} status changed to {input.Status.ToString()} " });
 
                 return AppResult.Ok();
             }

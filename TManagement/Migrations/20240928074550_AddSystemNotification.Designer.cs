@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using TManagement.Entities;
 
@@ -11,9 +12,11 @@ using TManagement.Entities;
 namespace TManagement.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240928074550_AddSystemNotification")]
+    partial class AddSystemNotification
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -111,8 +114,8 @@ namespace TManagement.Migrations
                             EducationLevelId = new Guid("cfe43cb8-7b8d-4955-bca1-491971508a79"),
                             Email = "Atallah.esaied@gmail.com",
                             FullName = "System admin",
-                            PasswordHash = "4D77414089D11A83B379F5601B125B9FDB3CD0A123B2853C1C8FCEBB963B1FA1F9942B1C7D7B13BF81DC07BC7A9CE9FFFF1BAEF87FA506A74E7B827FDE82A8ED",
-                            PasswordSalt = "37F6B934DFB6F18BDF69150031663192E2D53E30B92F3DE66D9EBB19A877D8AB3A1A7184952121B792AA34018EC10E15A27EB9986A6DF24A1D3743C08E9B949D"
+                            PasswordHash = "638B0CEF33FA0A8A022FCD9FD1ACF4DDD4DA7507CE2E5228E26C1F09B25E58266BEA37E9D4C8A420954CD7BEF0EC8F2ED17DDCF1334BBA2EC8798A7E783EF1C9",
+                            PasswordSalt = "3FD9B3C5AF3541ABFDCF3F31F2876C8997857B4B18E074A9D462F8C905D435299EFE51838B264F9BE5B2858B9E8DACC61B899D2C35F703FCBF4DCA2A4BB5F0B3"
                         });
                 });
 
@@ -139,64 +142,10 @@ namespace TManagement.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a7352666-5593-4cff-9443-6db0a1b9dcbc"),
+                            Id = new Guid("a1676eb1-cde4-483b-8f0d-981adf9a1bd6"),
                             GroupId = 1,
                             UserId = 1
                         });
-                });
-
-            modelBuilder.Entity("TManagement.Entities.Attachment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<long>("ContentLength")
-                        .HasColumnType("bigint");
-
-                    b.Property<string>("ContentType")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("OriginalName")
-                        .IsRequired()
-                        .HasMaxLength(450)
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Path")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Attachments");
-                });
-
-            modelBuilder.Entity("TManagement.Entities.ETask", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
-
-                    b.Property<string>("Description")
-                        .HasColumnType("ntext");
-
-                    b.Property<DateTime>("DueDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("TaskDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(300)
-                        .HasColumnType("nvarchar(300)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Tasks");
                 });
 
             modelBuilder.Entity("TManagement.Entities.Lookup", b =>
@@ -243,27 +192,27 @@ namespace TManagement.Migrations
                         },
                         new
                         {
-                            Id = new Guid("46baabeb-030b-49f1-b6e5-cd02e313956e"),
+                            Id = new Guid("19d6a2b4-f41f-4d36-908e-6c130c005ff1"),
                             FatherLookupId = new Guid("cfe43cb8-7b8d-4955-bca1-491971508a76"),
                             Name = "Amman",
                             Type = 5
                         },
                         new
                         {
-                            Id = new Guid("8bf52a09-678c-470e-a8e9-ad95fe2c1d7f"),
+                            Id = new Guid("d352ffaf-aad8-4771-9579-2e3467338b60"),
                             FatherLookupId = new Guid("cfe43cb8-7b8d-4955-bca1-491971508a75"),
                             Name = "Ramallah",
                             Type = 5
                         },
                         new
                         {
-                            Id = new Guid("e17c10fd-e4c0-47cc-a3bc-c5ef3e229b4a"),
+                            Id = new Guid("931202e3-deb3-49ba-bf40-9d1a84885d18"),
                             Name = "Elemantary",
                             Type = 21
                         },
                         new
                         {
-                            Id = new Guid("29be72b1-3a33-4188-9fc7-0579adac9ffa"),
+                            Id = new Guid("5d615fa5-3417-4195-acde-4146fa976f88"),
                             Name = "Tawjihi",
                             Type = 21
                         },
@@ -275,7 +224,7 @@ namespace TManagement.Migrations
                         },
                         new
                         {
-                            Id = new Guid("f3e1ba09-f161-4f62-824a-8db683276850"),
+                            Id = new Guid("4dbe705a-146d-41ea-8949-ef87be9ff8f8"),
                             Name = "Master and above",
                             Type = 21
                         });
@@ -309,21 +258,6 @@ namespace TManagement.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("SystemNotifications");
-                });
-
-            modelBuilder.Entity("TManagement.Entities.TaskAttachment", b =>
-                {
-                    b.Property<int>("TaskId")
-                        .HasColumnType("int");
-
-                    b.Property<Guid>("AttachmentId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("TaskId", "AttachmentId");
-
-                    b.HasIndex("AttachmentId");
-
-                    b.ToTable("TaskAttachments");
                 });
 
             modelBuilder.Entity("TManagement.Entities.AppUser", b =>
@@ -384,25 +318,6 @@ namespace TManagement.Migrations
                     b.Navigation("AppUser");
                 });
 
-            modelBuilder.Entity("TManagement.Entities.TaskAttachment", b =>
-                {
-                    b.HasOne("TManagement.Entities.Attachment", "Attachments")
-                        .WithMany()
-                        .HasForeignKey("AttachmentId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("TManagement.Entities.ETask", "Task")
-                        .WithMany("Attachments")
-                        .HasForeignKey("TaskId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Attachments");
-
-                    b.Navigation("Task");
-                });
-
             modelBuilder.Entity("TManagement.Entities.AppGroup", b =>
                 {
                     b.Navigation("Users");
@@ -411,11 +326,6 @@ namespace TManagement.Migrations
             modelBuilder.Entity("TManagement.Entities.AppUser", b =>
                 {
                     b.Navigation("Groups");
-                });
-
-            modelBuilder.Entity("TManagement.Entities.ETask", b =>
-                {
-                    b.Navigation("Attachments");
                 });
 
             modelBuilder.Entity("TManagement.Entities.Lookup", b =>

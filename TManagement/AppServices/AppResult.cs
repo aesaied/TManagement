@@ -9,4 +9,10 @@
 
         public static AppResult Ok() { return new AppResult { Success = true, }; }
     }
+
+    public class AppResult<T> : AppResult
+    {
+        public T? Value { get; set; }
+
+    }
 }

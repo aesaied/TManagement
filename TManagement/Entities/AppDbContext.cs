@@ -22,6 +22,15 @@ namespace TManagement.Entities
 
         public DbSet<Lookup> Lookups { get; set; }
 
+        public DbSet<SystemNotification> SystemNotifications { get; set; }
+
+
+        public DbSet<ETask> Tasks { get; set; }
+
+        public DbSet<Attachment> Attachments { get; set; }
+
+        public DbSet<TaskAttachment> TaskAttachments { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -44,12 +53,12 @@ namespace TManagement.Entities
                 new Lookup() { Name ="Palestine", Id=palId, Type= LookupType.Country },
                 new Lookup() { Name = "Jordan", Id = jodId, Type = LookupType.Country },
                 new Lookup() { Name = "Jerusalem", Id = jerusId, Type = LookupType.City, FatherLookupId=palId },
-                new Lookup() { Name = "Amman", Id = Guid.NewGuid(), Type = LookupType.City, FatherLookupId=jodId },
-                new Lookup() { Name = "Ramallah", Id = Guid.NewGuid(), Type = LookupType.City, FatherLookupId=palId },
-                new Lookup() { Name = "Elemantary", Id = Guid.NewGuid(), Type = LookupType.EducationLevel },
-                new Lookup() { Name = "Tawjihi", Id = Guid.NewGuid(), Type = LookupType.EducationLevel },
+                new Lookup() { Name = "Amman", Id = Guid.Parse("{46BAABEB-030B-49F1-B6E5-CD02E313956E}"), Type = LookupType.City, FatherLookupId=jodId },
+                new Lookup() { Name = "Ramallah", Id = Guid.Parse("{8BF52A09-678C-470E-A8E9-AD95FE2C1D7F}"), Type = LookupType.City, FatherLookupId=palId },
+                new Lookup() { Name = "Elemantary", Id = Guid.Parse("{E17C10FD-E4C0-47CC-A3BC-C5EF3E229B4A}"), Type = LookupType.EducationLevel },
+                new Lookup() { Name = "Tawjihi", Id = Guid.Parse("{29BE72B1-3A33-4188-9FC7-0579ADAC9FFA}"), Type = LookupType.EducationLevel },
                 new Lookup() { Name = "BA/BS", Id =baId, Type = LookupType.EducationLevel },
-                new Lookup() { Name = "Master and above", Id = Guid.NewGuid(), Type = LookupType.EducationLevel }
+                new Lookup() { Name = "Master and above", Id = Guid.Parse("{F3E1BA09-F161-4F62-824A-8DB683276850}"), Type = LookupType.EducationLevel }
 
 
 
@@ -81,9 +90,12 @@ namespace TManagement.Entities
 
 
             modelBuilder.Entity<AppUserGroup>().HasData(
-                new AppUserGroup() { GroupId=1, UserId=1, Id=Guid.NewGuid() });
+                new AppUserGroup() { GroupId=1, UserId=1, Id= Guid.Parse("A7352666-5593-4CFF-9443-6DB0A1B9DCBC") });
 
 
+
+            //  composite key
+            modelBuilder.Entity<TaskAttachment>().HasKey(s => new { s.TaskId, s.AttachmentId });
             // user  Hashing password
 
         }
