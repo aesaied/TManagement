@@ -31,11 +31,15 @@ namespace TManagement.Entities
 
         public DbSet<TaskAttachment> TaskAttachments { get; set; }
 
+        public DbSet<ETaskUsers> ETaskUsers { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
 
+            //
+            modelBuilder.Entity<ETask>().Property(s => s.CurrentStatus).HasDefaultValueSql("0");
            
             modelBuilder.Entity<AppUser>().HasOne(s=>s.City).WithMany(c=>c.CityUsers).OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<AppUser>().HasOne(s => s.EducationLevel).WithMany(c=>c.EducationLevelUsers).OnDelete(DeleteBehavior.NoAction);

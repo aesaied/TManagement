@@ -21,6 +21,9 @@ namespace TManagement.Entities
         public DateTime DueDate { get; set; }
 
 
+        public TaskStatus CurrentStatus { get; set; }   
+
+        public ICollection<ETaskUsers>? Users { get; set; } 
 
         public ICollection<TaskAttachment>? Attachments { get; set; }
     }

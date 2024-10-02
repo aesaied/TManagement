@@ -1,0 +1,96 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+
+
+
+@{
+    ViewData["Title"] = "Users";
+}
+
+<div class="content">
+
+    <!-- Start Content-->
+    <div class="container-fluid">
+
+        <!-- start page title -->
+        <div class="row">
+            <div class="col-12">
+                <div class="page-title-box">
+                    <div class="page-title-right">
+                        <ol class="breadcrumb m-0">
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">UBold</a></li>
+                            <li class="breadcrumb-item"><a href="javascript: void(0);">Tables</a></li>
+                            <li class="breadcrumb-item active">Datatables</li>
+                        </ol>
+                    </div>
+                    <h4 class="page-title">Task List</h4>
+                </div>
+            </div>
+        </div>
+        <!-- end page title -->
+
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <h4 class="header-title">Tasks list</h4>
+
+                        <a asp-action="Create" class="btn btn-primary">Add new Task</a>
+
+                        <table id="tasksTable" class="table dt-responsive nowrap w-100">
+                            <thead>
+                                <tr>
+                                    <th>Title</th>
+                                    <th>Task Date</th>
+                                    <th>DueDate</th>
+                                    <th>Users</th>
+                                    <th>Attachments</th>
+                                    <th>Current status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+
+
+                        </table>
+
+                    </div> <!-- end card body-->
+                </div> <!-- end card -->
+            </div><!-- end col-->
+        </div>
+        <!-- end row-->
+
+
+
+    </div>
+
+</div>
+
+
+<div id="dvModels"></div>
+
+
+
+@section Scripts {
+    <partial name="_DataTablesScripts" />
+
+    <script>
+
+        var jsonUrl = '@Url.Action("GetJsonList")';
+
+    </script>
+    <script src="~/js/pages/tasks/index.js"></script>
+
+}
+
+@section Styles {
+    <partial name="_DatatablesStyles" />
+}
+
+
+

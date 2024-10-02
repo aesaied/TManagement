@@ -9,6 +9,7 @@ using Microsoft.Extensions.Options;
 using System.Globalization;
 using TManagement.AppServices.Account;
 using TManagement.AppServices.Attachments;
+using TManagement.AppServices.ETasks;
 using TManagement.AppServices.Loockups;
 using TManagement.Entities;
 using TManagement.Hubs;
@@ -44,6 +45,8 @@ namespace TManagement
             builder.Services.AddScoped<IAccountAppService, AccountAppService>();    
             builder.Services.AddScoped<INotificationManager, NotificationManager>();
             builder.Services.AddScoped<IAttachmentsAppService, AttachmentsAppService>();
+            builder.Services.AddScoped<IETasksAppService, ETasksAppService>();
+
 
 
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(options => {

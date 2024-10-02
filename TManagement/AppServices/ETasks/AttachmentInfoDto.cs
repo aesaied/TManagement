@@ -1,0 +1,10 @@
+﻿namespace TManagement.AppServices.ETasks
+{
+    public class AttachmentInfoDto
+    {
+
+        public Guid Id { get; set; }
+
+        public string Name { get; set; }
+    }
+}
